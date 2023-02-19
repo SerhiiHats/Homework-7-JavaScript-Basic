@@ -15,13 +15,24 @@
         Перепишите данный код на использование классов вместо функций-конструкторов.
         */
 
-        function Car(model, yaer) {
-            this.yaer = yaer;
-            this.model = model;
-        }
+        // function Car(model, yaer) {
+        //     this.yaer = yaer;
+        //     this.model = model;
+        // }
 
-        Car.prototype.showInfo = function () {
-            console.log(this.model + " " + this.yaer);
+        // Car.prototype.showInfo = function () {
+        //     console.log(this.model + " " + this.yaer);
+        // }
+
+        class Car {
+            constructor(model, year) {
+                this.model = model;
+                this.year = year;
+            }
+
+            showInfo() {
+                console.log(this.model + " " + this.year);
+            }
         }
 
         let car1 = new Car("Audi", 2018);
