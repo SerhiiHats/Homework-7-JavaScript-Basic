@@ -61,18 +61,78 @@
             padding-left: 4px;
             width: 68%;
         }
+
+        .to-do-list {
+            display: flex;
+        }
+
+        .menu {
+            margin: 8px;
+            padding: 2px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-menu {
+            padding: 4px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .btn-menu:nth-child(1) {
+            background-color: rgb(247, 94, 94);
+        }
+
+        .btn-menu:nth-child(1):hover {
+            background-color: red;
+            box-shadow: 0 0 5px 2px rgb(241, 76, 76);
+        }
+
+        .btn-menu:nth-child(1):active {
+            box-shadow: none;
+        }
+
+        .btn-menu:nth-child(2) {
+            background-color: rgb(106, 106, 247);
+        }
+
+        .btn-menu:nth-child(2):hover {
+            background-color: blue;
+            box-shadow: 0 0 5px 2px rgb(85, 85, 241);
+        }
+
+        .btn-menu:nth-child(2):active {
+            box-shadow: none;
+        }
+
+
+        /* .menu :first-child{
+            background-color:red;
+        } */
+
+        /* .menu :last-child{
+            background-color: blue;
+        } */
     </style>
 </head>
 
 <body>
-    <div class="input-panel">
-        <input type="text" id="task-name-input">
-        <button id="add-task-btn">Добавить задачу</button>
-    </div>
-    <div class="task-list">
-        <p id="start-message">Нет новых задач</p>
-    </div>
-
+    <section class="to-do-list">
+        <div>
+            <div class="input-panel">
+                <input type="text" id="task-name-input">
+                <button id="add-task-btn">Добавить задачу</button>
+            </div>
+            <div class="task-list">
+                <p id="start-message">Нет новых задач</p>
+            </div>
+        </div>
+        <nav class="menu">
+            <button id="unfinished" class="btn-menu">Показать не завершенные задачи</button>
+            <button id="everything" class="btn-menu">Показать все</button>
+        </nav>
+    </section>
     <script>
         /*
         Задание:
@@ -89,9 +149,14 @@
         let addTaskButton = document.querySelector("#add-task-btn");
         let startMessage = document.querySelector("#start-message");
         let taskList = document.querySelector(".task-list");
+        let getUnfinishedTaskButton = document.querySelector("#unfinished");
+        let getEverythingTaskButton = document.querySelector("#everything");
+
         let tasks = [];
 
         addTaskButton.addEventListener("click", addTaskHandler);
+        getUnfinishedTaskButton.addEventListener("click", getUnfinishedHandler);
+        getEverythingTaskButton.addEventListener("click", getEverythingTaskHandler);
 
         taskNameInput.addEventListener("keydown", function (e) {
             if (e.code == "Enter") addTaskHandler();
@@ -111,6 +176,28 @@
             }
         }
 
+        function getUnfinishedHandler() {
+            if (tasks.length !== 0) {
+                taskList.innerHTML = "";
+            }
+
+            tasks.forEach(task => {
+                if (!task.isDone) {
+                    task.createIn(taskList);
+                }
+            });
+        }
+
+        function getEverythingTaskHandler() {
+            if (tasks.length !== 0) {
+                taskList.innerHTML = "";
+            }
+
+            tasks.forEach(task => {
+                task.createIn(taskList);
+            });
+        }
+
         class Task {
             constructor(text) {
                 this.text = text;
@@ -128,6 +215,11 @@
 
                 let p = document.createElement("p");
                 p.innerText = this.text;
+
+                if (this.isDone) {
+                    this.div.classList.add("completed");
+                    input.checked = "checked";
+                }
 
                 this.div.append(input);
                 this.div.append(p);
